@@ -14,7 +14,7 @@ DISP = display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 display.set_caption("Connect 4 Recursive")
 
 # testing board class
-board = Board(WIDTH, HEIGHT, 1)
+board = Board(WIDTH, HEIGHT, 2)
 print(board)
 print(board.chips)
 print(board.sub_boards)

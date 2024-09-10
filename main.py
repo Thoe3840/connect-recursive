@@ -2,26 +2,20 @@ import pygame
 from pygame import *
 
 from board import Board
-
-DISPLAY_WIDTH = 700
-DISPLAY_HEIGHT = 600
-WIDTH = 7
-HEIGHT = 6
+from view import View
 
 pygame.init()
 
-DISP = display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-display.set_caption("Connect 4 Recursive")
+WIDTH = 7
+HEIGHT = 6
 
-# testing board class
-board = Board(WIDTH, HEIGHT, 2)
-print(board)
-print(board.chips)
-print(board.sub_boards)
+board = Board(WIDTH, HEIGHT, 1, 4)
+view = View(WIDTH, HEIGHT)
+view.render_board(board)
 
 running = True
 while running:
   for event in pygame.event.get():
     if event.type == QUIT:
       running = False
-      
+      break

@@ -6,7 +6,7 @@ from board import Board
 from random import randint
 
 class View:
-  DEFAULT_CHIP_SIZE = 100
+  DEFAULT_CHIP_SIZE = 100  # diameter
   BORDER_PROPORTION = 0.1  # proportion of chip size put between chips
 
   DARK_BLUE = (20, 0, 75)
@@ -45,8 +45,23 @@ class View:
       for j in range(self.ROWS):
         draw.circle(
           self.screen,
-          self.COLOUR_MAP[board.chips[i][j]],
-          ((i + 0.5) * self.CHIP_WITH_BORDER_SIZE, (self.ROWS - j - 0.5) * self.CHIP_WITH_BORDER_SIZE),
+          self.COLOUR_MAP[board.get_chip(i, j)],
+          ((i + 0.5) * self.CHIP_WITH_BORDER_SIZE, (j + 0.5) * self.CHIP_WITH_BORDER_SIZE),
           self.CHIP_SIZE // 2,
         )
     display.update()
+
+  def update_chip(self, column: int, row: int, player: bool):
+    draw.circle(
+      self.screen,
+      self.COLOUR_MAP[Board.PLAYER_ONE if player else Board.PLAYER_TWO],
+      ((column + 0.5) * self.CHIP_WITH_BORDER_SIZE, (row + 0.5) * self.CHIP_WITH_BORDER_SIZE),
+      self.CHIP_SIZE // 2,
+    )
+    display.update()
+
+  def which_column_clicked(self, x: int):
+    x -= self.CHIP_SIZE * self.BORDER_PROPORTION // 2
+    if x % self.CHIP_WITH_BORDER_SIZE <= self.CHIP_SIZE:
+      return int(x // self.CHIP_WITH_BORDER_SIZE)
+    return -1

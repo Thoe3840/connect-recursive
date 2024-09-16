@@ -11,11 +11,12 @@ class View:
 
   DARK_BLUE = (20, 0, 75)
   BLUE = (40, 90, 155)
+  LIGHT_BLUE = (70, 160, 195)
   RED = (170, 30, 30)
   GREEN = (0, 200, 0)
   YELLOW = (230, 210, 40)
-  LIGHT_GREY = (100, 100, 100)
-  
+  LIGHT_GREY = (180, 180, 180)
+
   COLOUR_MAP = {
     Board.NOT_COMPLETE: BLUE,
     Board.PLAYER_ONE: RED,
@@ -27,14 +28,15 @@ class View:
     self.COLUMNS = columns
     self.ROWS = rows
     self.CHIP_SIZE = self.chip_size(columns, rows)
-    self.CHIP_WITH_BORDER_SIZE = self.CHIP_SIZE * (1 + self.BORDER_PROPORTION)
+    self.BORDER_SIZE = self.CHIP_SIZE * self.BORDER_PROPORTION
+    self.CHIP_WITH_BORDER_SIZE = self.CHIP_SIZE + self.BORDER_SIZE
     self.DISPLAY_WIDTH = columns * self.CHIP_WITH_BORDER_SIZE
     self.DISPLAY_HEIGHT = rows * self.CHIP_WITH_BORDER_SIZE
     self.screen = display.set_mode((self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT))
     display.set_caption("Connect Recursive")
     self.screen.fill(self.DARK_BLUE)
 
-  def chip_size(self, columns: int, rows: int):
+  def chip_size(self, columns: int, rows: int) -> int:
     width, height = screen_size()
     width_max_chip_size = (width - 100) // (columns * (1 + self.BORDER_PROPORTION))
     height_max_chip_size = (height - 100) // (rows * (1 + self.BORDER_PROPORTION))
@@ -60,8 +62,17 @@ class View:
     )
     display.update()
 
-  def which_column_clicked(self, x: int):
-    x -= self.CHIP_SIZE * self.BORDER_PROPORTION // 2
+  def which_column_selected(self, x: int) -> int:
+    x -= self.BORDER_SIZE // 2
     if x % self.CHIP_WITH_BORDER_SIZE <= self.CHIP_SIZE:
       return int(x // self.CHIP_WITH_BORDER_SIZE)
     return -1
+
+  def highlight_selected_chip(self, column: int, row: int, selected: bool):
+    draw.circle(
+      self.screen,
+      self.LIGHT_BLUE if selected else self.BLUE,
+      ((column + 0.5) * self.CHIP_WITH_BORDER_SIZE, (row + 0.5) * self.CHIP_WITH_BORDER_SIZE),
+      self.CHIP_SIZE // 2,
+    )
+    display.update()
